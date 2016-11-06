@@ -111,3 +111,41 @@ if (Test-Path($ChocolateyProfile)) {
 }
 
 function power() { control powercfg.cpl }
+
+function playTs() {
+    Clear-Content C:\playground\test.ts
+    code C:\playground\test.ts
+}
+
+function playJs() {
+    Clear-Content C:\playground\test.js
+    code C:\playground\test.js
+}
+
+function playTs-project() {
+    if (Test-Path C:\playground\playTsProject) {
+        Remove-Item C:\playground\playTsProject -Force -Recurse
+    }
+    mkdir C:\playground\playTsProject
+    New-Item -Path "C:\playground\playTsProject\tsconfig.json" -Value "{}"
+    New-Item -Path "C:\playground\playTsProject\file1.ts"
+    code C:\playground\playTsProject
+}
+
+function playJs-project() {
+    $folderPath = "C:\playground\playJsProject";
+    if (Test-Path $folderPath) {
+        Remove-Item $folderPath -Force -Recurse
+    }
+    mkdir $folderPath
+    New-Item -Path "$($folderPath)\tsconfig.json" -Value '{ "compilerOptions": { "allowJs": true } }'
+    New-Item -Path "$($folderPath)\file1.js"
+    code $folderPath
+}
+
+Set-PSReadlineKeyHandler -Chord Shift+UpArrow    -Function HistorySearchBackward
+Set-PSReadlineKeyHandler -Chord Shift+DownArrow  -Function HistorySearchForward
+
+function cwd() {
+    $pwd.Path | clip
+}
